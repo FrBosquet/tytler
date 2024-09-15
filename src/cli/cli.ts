@@ -1,3 +1,5 @@
 #!/usr/bin/env node
 
-console.log("Hello from Tytler CLI!");
+import { logger } from "alpalog";
+
+logger.info("# Hello from Tytler!");
