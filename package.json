@@ -4,9 +4,15 @@
   "description": "Inspired by Alexander Fraser Tytler, who wrote one of the earliest essays on the principles of translation. Tytler provides an assited workflow to work with translations in both server side and client side react applications.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:cli": "tsc src/cli/* --outDir bin"
+  },
+  "bin": {
+    "tytler": "./bin/cli.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  }
 }
