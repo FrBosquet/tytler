@@ -29,3 +29,12 @@ export const getConfig = () => {
 
   return JSON.parse(file);
 }
+
+export const readJsonFile = <T>(filePath: string): T => {
+  return JSON.parse(readFileSync(filePath, 'utf8'));
+}
+
+export const getPackageJson = () => {
+  const packageJsonPath = path.join(__dirname, 'package.json');
+  return readJsonFile<{ version: string }>(packageJsonPath);
+}
