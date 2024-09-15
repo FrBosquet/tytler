@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const alpalog_1 = require("alpalog");
 const config_1 = __importDefault(require("./config"));
 const init_1 = __importDefault(require("./init"));
+const install_1 = __importDefault(require("./install"));
 const args = process.argv.slice(2);
 const command = args[0];
 function main() {
@@ -32,6 +33,9 @@ function main() {
         }
         else if (command === 'config') {
             (0, config_1.default)();
+        }
+        else if (command === 'install') {
+            (0, install_1.default)();
         }
         else {
             alpalog_1.logger.error(`# Command not found: ${command}`);

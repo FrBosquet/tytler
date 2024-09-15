@@ -3,6 +3,7 @@
 import { logger } from "alpalog";
 import config from "./config";
 import init from "./init";
+import install from "./install";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -18,6 +19,8 @@ async function main() {
     init();
   } else if (command === 'config') {
     config();
+  } else if (command === 'install') {
+    install();
   } else {
     logger.error(`# Command not found: ${command}`);
     process.exit(1);
