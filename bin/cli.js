@@ -14,9 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const alpalog_1 = require("alpalog");
-const process_1 = require("process");
+const config_1 = __importDefault(require("./config"));
 const init_1 = __importDefault(require("./init"));
-const lib_1 = require("./lib");
 const args = process.argv.slice(2);
 const command = args[0];
 function main() {
@@ -26,15 +25,17 @@ function main() {
             alpalog_1.logger.whisper(`\n# Usage: tytler <command>`);
             alpalog_1.logger.whisper(`\n# Commands:`);
             alpalog_1.logger.whisper(`- init: Create a config file in the current directory`);
+            alpalog_1.logger.whisper(`- config: Show the current config`);
         }
         else if (command === 'init') {
             (0, init_1.default)();
         }
         else if (command === 'config') {
-            alpalog_1.logger.info(`# Tytler config: \n\n`);
-            const config = (0, lib_1.getConfig)();
-            alpalog_1.logger.json(config);
-            (0, process_1.exit)(0);
+            (0, config_1.default)();
+        }
+        else {
+            alpalog_1.logger.error(`# Command not found: ${command}`);
+            process.exit(1);
         }
     });
 }

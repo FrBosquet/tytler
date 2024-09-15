@@ -18,6 +18,9 @@ async function main() {
     init();
   } else if (command === 'config') {
     config();
+  } else {
+    logger.error(`# Command not found: ${command}`);
+    process.exit(1);
   }
 }
 
