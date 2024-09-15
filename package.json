@@ -17,6 +17,6 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
-    "alpalog": "^0.0.1"
+    "alpalog": "^0.0.2"
   }
 }

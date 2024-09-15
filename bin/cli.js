@@ -14,7 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const alpalog_1 = require("alpalog");
+const process_1 = require("process");
 const init_1 = __importDefault(require("./init"));
+const lib_1 = require("./lib");
 const args = process.argv.slice(2);
 const command = args[0];
 function main() {
@@ -27,6 +29,12 @@ function main() {
         }
         else if (command === 'init') {
             (0, init_1.default)();
+        }
+        else if (command === 'config') {
+            alpalog_1.logger.info(`# Tytler config: /n/n`);
+            const config = (0, lib_1.getConfig)();
+            console.log(JSON.stringify(config, null, 2));
+            (0, process_1.exit)(0);
         }
     });
 }
