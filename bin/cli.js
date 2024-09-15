@@ -31,9 +31,9 @@ function main() {
             (0, init_1.default)();
         }
         else if (command === 'config') {
-            alpalog_1.logger.info(`# Tytler config: /n/n`);
+            alpalog_1.logger.info(`# Tytler config: \n\n`);
             const config = (0, lib_1.getConfig)();
-            console.log(JSON.stringify(config, null, 2));
+            alpalog_1.logger.json(config);
             (0, process_1.exit)(0);
         }
     });
