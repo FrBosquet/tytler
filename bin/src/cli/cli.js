@@ -17,15 +17,14 @@ const alpalog_1 = require("alpalog");
 const config_1 = __importDefault(require("./config"));
 const init_1 = __importDefault(require("./init"));
 const install_1 = __importDefault(require("./install"));
-const lib_1 = require("./lib");
+const package_json_1 = require("../../package.json");
 const args = process.argv.slice(2);
 const command = args[0];
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         if (!command) {
-            const pkjson = (0, lib_1.getPackageJson)();
-            alpalog_1.logger.info(`\n# Hello from Tytler! ${args}`);
-            alpalog_1.logger.warn(`version: ${pkjson.version}`);
+            alpalog_1.logger.info(`# Hello from Tytler! ${args}`);
+            alpalog_1.logger.warn(`\n# version: ${package_json_1.version}`);
             alpalog_1.logger.whisper(`\n# Usage: tytler <command>`);
             alpalog_1.logger.whisper(`\n# Commands:`);
             alpalog_1.logger.whisper(`- init: Create a config file in the current directory`);
@@ -42,10 +41,8 @@ function main() {
         else if (command === 'install') {
             (0, install_1.default)();
         }
-        else {
-            alpalog_1.logger.error(`# Command not found: ${command}`);
-            process.exit(1);
-        }
+        alpalog_1.logger.error(`# Command not found: ${command}`);
+        process.exit(1);
     });
 }
 main();

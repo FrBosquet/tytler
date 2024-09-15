@@ -28,11 +28,11 @@ async function main() {
     config();
   } else if (command === 'install') {
     install();
+  } else {
+    logger.error(`# Command not found: ${command}`);
+
+    process.exit(1);
   }
-
-  logger.error(`# Command not found: ${command}`);
-
-  process.exit(1);
 }
 
 main();

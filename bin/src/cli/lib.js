@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPackageJson = exports.readJsonFile = exports.getConfig = exports.askQuestion = void 0;
+exports.getConfig = exports.askQuestion = void 0;
 const alpalog_1 = require("alpalog");
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
@@ -30,12 +30,3 @@ const getConfig = () => {
     return JSON.parse(file);
 };
 exports.getConfig = getConfig;
-const readJsonFile = (filePath) => {
-    return JSON.parse((0, fs_1.readFileSync)(filePath, 'utf8'));
-};
-exports.readJsonFile = readJsonFile;
-const getPackageJson = () => {
-    const packageJsonPath = path_1.default.join(__dirname, 'package.json');
-    return (0, exports.readJsonFile)(packageJsonPath);
-};
-exports.getPackageJson = getPackageJson;
