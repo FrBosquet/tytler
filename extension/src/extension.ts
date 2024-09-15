@@ -18,7 +18,6 @@ export function activate(context: vscode.ExtensionContext) {
 		return JSON.parse(readFileSync(getConfigFilePath(), 'utf8'));
 	};
 
-
 	const checkAvailability = async () => {
 		try {
 			await new Promise((resolve, reject) => {
