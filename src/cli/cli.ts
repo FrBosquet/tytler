@@ -19,7 +19,7 @@ async function main() {
     logger.whisper(`\n# Commands:`);
     logger.whisper(`- init: Create a config file in the current directory`);
     logger.whisper(`- config: Show the current config`);
-    logger.whisper(`- install: Install the Tytler vs code extension`);
+    logger.whisper(`- install: Install the Tytler VS Code extension`);
 
     process.exit(0);
   } else if (command === 'init') {

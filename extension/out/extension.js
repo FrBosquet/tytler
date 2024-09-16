@@ -32,9 +32,11 @@ const child_process_1 = require("child_process");
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 const vscode = __importStar(require("vscode"));
+const extension_lib_1 = require("./extension.lib");
 function activate(context) {
     console.log('"tytler" extension is now active!');
     const workspaceFolders = vscode.workspace.workspaceFolders;
+    let previousKey = '';
     const getConfigFilePath = () => {
         if (!workspaceFolders) {
             throw new Error('No workspace folder is open.');
@@ -68,7 +70,35 @@ function activate(context) {
         if (workspaceFolders) {
             await checkAvailability();
             const config = getConfig();
-            vscode.window.showInformationMessage(JSON.stringify(config));
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showErrorMessage('Tytler: No active editor found.');
+                return;
+            }
+            const cursorPosition = editor.selection.active;
+            const line = editor.document.lineAt(cursorPosition.line);
+            const contextText = line.text;
+            const selectedText = editor.document.getText(editor.selection);
+            console.log({
+                contextText,
+                selectedText
+            });
+            const translationKey = await vscode.window.showInputBox({
+                placeHolder: 'Enter the translation key',
+                value: previousKey ?? '',
+                ignoreFocusOut: true,
+                valueSelection: [previousKey.length, previousKey.length]
+            });
+            if (!translationKey) {
+                vscode.window.showInformationMessage('Tytler: No translation key provided');
+                return;
+            }
+            if (translationKey.includes('.')) {
+                const keyParts = translationKey.split('.');
+                keyParts.pop();
+                previousKey = keyParts.join('.') + '.';
+            }
+            const replacement = (0, extension_lib_1.getReplacement)(translationKey, selectedText, contextText);
         }
         else {
             vscode.window.showErrorMessage('Tytler: No workspace folder is open.');
