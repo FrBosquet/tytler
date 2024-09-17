@@ -99,6 +99,16 @@ function activate(context) {
                 previousKey = keyParts.join('.') + '.';
             }
             const replacement = (0, extension_lib_1.getReplacement)(translationKey, selectedText, contextText);
+            await editor.edit(editBuilder => {
+                const lineRange = line.range;
+                const selectionRange = editor.selection;
+                // Determine the wider range
+                const start = lineRange.start.isBefore(selectionRange.start) ? lineRange.start : selectionRange.start;
+                const end = lineRange.end.isAfter(selectionRange.end) ? lineRange.end : selectionRange.end;
+                const widerRange = new vscode.Range(start, end);
+                editBuilder.replace(widerRange, replacement);
+            });
+            vscode.window.showInformationMessage('Tytler: Text replaced with translation key. Run the script to update the JSON file.');
         }
         else {
             vscode.window.showErrorMessage('Tytler: No workspace folder is open.');

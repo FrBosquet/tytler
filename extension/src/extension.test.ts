@@ -26,24 +26,30 @@ describe('replacement', () => {
   it('translates text outside jsx', () => {
     const input = { contextText: "  const a = 'hola que pasa'", selectedText: "'hola que pasa" };
 
-    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`t('key->hola que pasa')`);
+    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`const a = t('key->hola que pasa')`);
   });
 
   it('translates text outside jsx', () => {
     const input = { contextText: "  const a = 'hola que pasa'", selectedText: "hola que pasa'" };
 
-    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`t('key->hola que pasa')`);
+    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`const a = t('key->hola que pasa')`);
   });
 
   it('translates text outside jsx', () => {
     const input = { contextText: "  const a = 'hola que pasa'", selectedText: "hola que pasa" };
 
-    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`t('key->hola que pasa')`);
+    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`const a = t('key->hola que pasa')`);
   });
 
   it('translates text outside jsx', () => {
     const input = { contextText: "  const a = 'hola que pasa'", selectedText: "'hola que pasa'" };
 
-    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`t('key->hola que pasa')`);
+    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`const a = t('key->hola que pasa')`);
+  });
+
+  it('multiline, combines in a single line', () => {
+    const input = { contextText: `            Gestione las invitaciones de su día especial con nuestra completa`, selectedText: 'Gestione las invitaciones de su día especial con nuestra completa\n      aplicación de reserva de bodas.' };
+
+    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`{t('key->Gestione las invitaciones de su día especial con nuestra completa aplicación de reserva de bodas.')}`);
   });
 });

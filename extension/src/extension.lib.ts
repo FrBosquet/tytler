@@ -1,8 +1,15 @@
-export const getReplacement = (key: string, text: string, context: string) => {
-  const outText = text.length > 0 ? text : context;
+const htmlRegex = /(<[^>]+>)([^<]+)(<\/[^>]+>)/;
+const stringLiteralRegex = /(['"`])([^'"`]+)\1/;
 
-  const htmlRegex = /(<[^>]+>)([^<]+)(<\/[^>]+>)/;
-  const stringLiteralRegex = /(['"`])([^'"`]+)\1/;
+/*
+* Returns the replacement string for the given line.
+*/
+export const getReplacement = (key: string, text: string, context: string) => {
+  let outText = text.length > 0 ? text : context;
+
+  if (outText.includes('\n')) {
+    outText = outText.replace(/\n(\s*)/g, ' ');
+  }
 
   const htmlMatch = outText.match(htmlRegex);
   const stringLiteralMatch = context.match(stringLiteralRegex);
@@ -13,8 +20,10 @@ export const getReplacement = (key: string, text: string, context: string) => {
   }
 
   if (stringLiteralMatch) {
-    const strippedText = outText.trim().replace(/^['"`]|['"`]$/g, '');
-    return `t('${key}->${strippedText}')`;
+    const [fullMatch, quote, innerText] = stringLiteralMatch;
+    const strippedText = innerText.trim();
+    const transformedText = `t('${key}->${strippedText}')`;
+    return context.replace(fullMatch, transformedText).trim();
   }
 
   return `{t('${key}->${outText.trim()}')}`;
