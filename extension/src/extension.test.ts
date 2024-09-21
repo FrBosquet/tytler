@@ -1,4 +1,3 @@
-import { it } from "node:test";
 import { getReplacement } from "./extension.lib";
 
 describe('replacement', () => {
@@ -57,7 +56,7 @@ describe('replacement', () => {
   it('handles links', () => {
     const input = { contextText: '              <Link href="/private">Crea tu invitación ahora</Link>', selectedText: 'Crea tu invitación ahora' };
 
-    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`<Link href="/private">{t('test->Crea tu invitación ahora')}</Link>`);
+    expect(getReplacement('key', input.selectedText, input.contextText)).toBe(`<Link href="/private">{t('key->Crea tu invitación ahora')}</Link>`);
 
   });
 });

@@ -41,9 +41,8 @@ async function main() {
     sync();
   } else {
     logger.error(`# Command not found: ${command}`);
-
-    process.exit(1);
   }
+  process.exit(1);
 }
 
 main();
