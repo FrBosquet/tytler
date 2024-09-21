@@ -51,7 +51,7 @@ const writeJsonFile = (pathName, obj) => {
 };
 exports.writeJsonFile = writeJsonFile;
 const getPackageJson = () => {
-    const packageJsonPath = path_1.default.join(__dirname, 'package.json');
+    const packageJsonPath = path_1.default.join(__dirname, '..', 'package.json');
     return (0, exports.readJsonFile)(packageJsonPath);
 };
 exports.getPackageJson = getPackageJson;

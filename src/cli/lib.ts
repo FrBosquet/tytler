@@ -57,7 +57,7 @@ export const writeJsonFile = (pathName: string, obj: Record<string, any>): void 
 }
 
 export const getPackageJson = () => {
-  const packageJsonPath = path.join(__dirname, 'package.json');
+  const packageJsonPath = path.join(__dirname, '..', 'package.json');
   return readJsonFile<{ version: string }>(packageJsonPath);
 }
 
