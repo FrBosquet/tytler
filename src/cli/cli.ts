@@ -5,6 +5,7 @@ import config from "./config";
 import init from "./init";
 import install from "./install";
 import { getPackageJson } from "./lib";
+import scan from "./scan";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -20,6 +21,7 @@ async function main() {
     logger.whisper(`- init: Create a config file in the current directory`);
     logger.whisper(`- config: Show the current config`);
     logger.whisper(`- install: Install the Tytler VS Code extension`);
+    logger.whisper(`- scan: Scan the current directory to parse Tytler translation and fill the default lang file`);
 
     process.exit(0);
   } else if (command === 'init') {
@@ -28,6 +30,8 @@ async function main() {
     config();
   } else if (command === 'install') {
     install();
+  } else if (command === 'scan') {
+    scan();
   } else {
     logger.error(`# Command not found: ${command}`);
 

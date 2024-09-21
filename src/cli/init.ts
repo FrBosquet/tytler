@@ -56,12 +56,19 @@ async function init() {
   const dir = rawDir.length ? rawDir : config.langDir;
   newConfig.langDir = dir;
 
+  // targetDir
+  let rawTargetDir = await askQuestion(`Where are your components located? default: './src' (enter to use default): `);
+
+  logger.whisper(`You can add more folders later`);
+  const targetDir = rawTargetDir.length ? rawTargetDir : config.targetDir[0];
+
+  newConfig.targetDir = [targetDir];
 
   logger.whisper(`Creating a config file in the current directory...`);
 
   writeFileSync(configPath, JSON.stringify(newConfig, null, 2));
 
-  logger.info(`\n# Done!`);
+  logger.info(`\n✅ Done!`);
   process.exit(0);
 }
 

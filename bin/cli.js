@@ -18,6 +18,7 @@ const config_1 = __importDefault(require("./config"));
 const init_1 = __importDefault(require("./init"));
 const install_1 = __importDefault(require("./install"));
 const lib_1 = require("./lib");
+const scan_1 = __importDefault(require("./scan"));
 const args = process.argv.slice(2);
 const command = args[0];
 function main() {
@@ -30,7 +31,8 @@ function main() {
             alpalog_1.logger.whisper(`\n# Commands:`);
             alpalog_1.logger.whisper(`- init: Create a config file in the current directory`);
             alpalog_1.logger.whisper(`- config: Show the current config`);
-            alpalog_1.logger.whisper(`- install: Install the Tytler vs code extension`);
+            alpalog_1.logger.whisper(`- install: Install the Tytler VS Code extension`);
+            alpalog_1.logger.whisper(`- scan: Scan the current directory to parse Tytler translation and fill the default lang file`);
             process.exit(0);
         }
         else if (command === 'init') {
@@ -41,6 +43,9 @@ function main() {
         }
         else if (command === 'install') {
             (0, install_1.default)();
+        }
+        else if (command === 'scan') {
+            (0, scan_1.default)();
         }
         else {
             alpalog_1.logger.error(`# Command not found: ${command}`);

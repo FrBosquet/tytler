@@ -1,6 +1,6 @@
 
 import { logger } from "alpalog";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 import readline from "readline";
 
@@ -19,22 +19,51 @@ export const getConfig = () => {
   const configPath = path.join(currentDir, 'tytler.config.json');
   // read the file in config path
 
-  const file = readFileSync(configPath, 'utf-8');
+  try {
+    const file = readFileSync(configPath, 'utf-8');
 
-  if (!file) {
+    logger.whisper('Config loaded!');
+
+    return JSON.parse(file) as {
+      langs: string[];
+      defaultLang: string;
+      langDir: string;
+      targetDir: string;
+    };
+  } catch (e) {
     logger.error(`\n# No config file found!`);
     logger.whisper(`# Run 'tytler init' to create a config file.`);
     process.exit(1);
   }
+}
 
-  return JSON.parse(file);
+export const sortObjectKeys = (
+  obj: Record<string, any>
+): Record<string, any> => {
+  return Object.keys(obj)
+    .sort()
+    .reduce((result: Record<string, any>, key: string) => {
+      result[key] = obj[key]
+      return result
+    }, {})
 }
 
 export const readJsonFile = <T>(filePath: string): T => {
   return JSON.parse(readFileSync(filePath, 'utf8'));
 }
 
+export const writeJsonFile = (pathName: string, obj: Record<string, any>): void => {
+  writeFileSync(pathName, JSON.stringify(sortObjectKeys(obj), null, 2))
+}
+
 export const getPackageJson = () => {
   const packageJsonPath = path.join(__dirname, 'package.json');
   return readJsonFile<{ version: string }>(packageJsonPath);
+}
+
+export const convertToCamelCase = (input: string): string => {
+  const parts = input.split('.');
+  const [firstPart, secondPart] = parts;
+  const capitalizedSecondPart = secondPart.charAt(0).toUpperCase() + secondPart.slice(1);
+  return firstPart + capitalizedSecondPart;
 }

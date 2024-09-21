@@ -10,10 +10,15 @@ export function activate(context: vscode.ExtensionContext) {
 	const workspaceFolders = vscode.workspace.workspaceFolders;
 	let previousKey: string = '';
 
-	const getConfigFilePath = () => {
+	const getWorkspaceFolder = () => {
 		if (!workspaceFolders) { throw new Error('No workspace folder is open.'); }
+		return workspaceFolders[0].uri.fsPath;
+	};
 
-		return path.join(workspaceFolders[0].uri.fsPath, 'tytler.config.json');
+	const getConfigFilePath = () => {
+		const workspaceFolder = getWorkspaceFolder();
+
+		return path.join(workspaceFolder, 'tytler.config.json');
 	};
 
 	const getConfig = () => {
@@ -43,6 +48,52 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	};
 
+	const replaceWithTranslation = async (editor: vscode.TextEditor) => {
+		const cursorPosition = editor.selection.active;
+		const line = editor.document.lineAt(cursorPosition.line);
+		const contextText = line.text;
+		const selectedText = editor.document.getText(editor.selection);
+
+		console.log({
+			contextText,
+			selectedText
+		});
+
+		const translationKey = await vscode.window.showInputBox({
+			placeHolder: 'Enter the translation key',
+			value: previousKey ?? '',
+			ignoreFocusOut: true,
+			valueSelection: [previousKey.length, previousKey.length]
+		});
+
+		if (!translationKey) {
+			vscode.window.showInformationMessage('Tytler: No translation key provided');
+			return;
+		}
+
+		if (translationKey.includes('.')) {
+			const keyParts = translationKey.split('.');
+			keyParts.pop();
+			previousKey = keyParts.join('.') + '.';
+		}
+
+		const replacement = getReplacement(translationKey, selectedText, contextText);
+
+		await editor.edit(editBuilder => {
+			const lineRange = line.range;
+			const selectionRange = editor.selection;
+
+			// Determine the wider range
+			const start = lineRange.start.isBefore(selectionRange.start) ? lineRange.start : selectionRange.start;
+			const end = lineRange.end.isAfter(selectionRange.end) ? lineRange.end : selectionRange.end;
+			const widerRange = new vscode.Range(start, end);
+
+			editBuilder.replace(widerRange, replacement);
+		});
+
+		await vscode.commands.executeCommand('workbench.action.files.saveWithoutFormatting');
+	};
+
 	const disposable = vscode.commands.registerCommand('tytler.replace-with-translation', async () => {
 		if (workspaceFolders) {
 			await checkAvailability();
@@ -54,49 +105,25 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			const cursorPosition = editor.selection.active;
-			const line = editor.document.lineAt(cursorPosition.line);
-			const contextText = line.text;
-			const selectedText = editor.document.getText(editor.selection);
+			await replaceWithTranslation(editor);
 
-			console.log({
-				contextText,
-				selectedText
+			await new Promise((resolve, reject) => {
+				exec(`tytler scan`, { cwd: getWorkspaceFolder() }, (error, stdout, stderr) => {
+					if (error) {
+						vscode.window.showErrorMessage(`Tytler CLI error: ${error.message}`);
+						reject(error);
+					}
+					if (stderr) {
+						vscode.window.showErrorMessage(`Tytler CLI error: ${stderr}`);
+						resolve(stderr);
+					}
+					resolve(stdout);
+				});
 			});
 
-			const translationKey = await vscode.window.showInputBox({
-				placeHolder: 'Enter the translation key',
-				value: previousKey ?? '',
-				ignoreFocusOut: true,
-				valueSelection: [previousKey.length, previousKey.length]
-			});
-
-			if (!translationKey) {
-				vscode.window.showInformationMessage('Tytler: No translation key provided');
-				return;
-			}
-
-			if (translationKey.includes('.')) {
-				const keyParts = translationKey.split('.');
-				keyParts.pop();
-				previousKey = keyParts.join('.') + '.';
-			}
-
-			const replacement = getReplacement(translationKey, selectedText, contextText);
-
-			await editor.edit(editBuilder => {
-				const lineRange = line.range;
-				const selectionRange = editor.selection;
-
-				// Determine the wider range
-				const start = lineRange.start.isBefore(selectionRange.start) ? lineRange.start : selectionRange.start;
-				const end = lineRange.end.isAfter(selectionRange.end) ? lineRange.end : selectionRange.end;
-				const widerRange = new vscode.Range(start, end);
-
-				editBuilder.replace(widerRange, replacement);
-			});
-
+			// vscode.commands.executeCommand('editor.action.formatDocument');
 			vscode.window.showInformationMessage('Tytler: Text replaced with translation key. Run the script to update the JSON file.');
+
 		} else {
 			vscode.window.showErrorMessage('Tytler: No workspace folder is open.');
 		}

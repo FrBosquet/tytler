@@ -54,9 +54,14 @@ function init() {
         let rawDir = yield (0, lib_1.askQuestion)(`Where are your language files located? default: './lang' (enter to use default): `);
         const dir = rawDir.length ? rawDir : config_json_1.default.langDir;
         newConfig.langDir = dir;
+        // targetDir
+        let rawTargetDir = yield (0, lib_1.askQuestion)(`Where are your components located? default: './src' (enter to use default): `);
+        alpalog_1.logger.whisper(`You can add more folders later`);
+        const targetDir = rawTargetDir.length ? rawTargetDir : config_json_1.default.targetDir[0];
+        newConfig.targetDir = [targetDir];
         alpalog_1.logger.whisper(`Creating a config file in the current directory...`);
         (0, fs_1.writeFileSync)(configPath, JSON.stringify(newConfig, null, 2));
-        alpalog_1.logger.info(`\n# Done!`);
+        alpalog_1.logger.info(`\n✅ Done!`);
         process.exit(0);
     });
 }

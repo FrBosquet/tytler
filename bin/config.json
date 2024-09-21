@@ -3,5 +3,8 @@
         "en"
     ],
     "defaultLang": "en",
-    "langDir": "lang"
+    "langDir": "lang",
+    "targetDir": [
+        "src"
+    ]
 }

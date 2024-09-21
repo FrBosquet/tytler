@@ -12,4 +12,6 @@ tytler should be installed globally. Tytler should have been initialized in the 
 
 Users appreciate release notes as you update your extension.
 
-### 1.0.0
+### 0.0.2
+
+fixes
