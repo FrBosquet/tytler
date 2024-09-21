@@ -140,10 +140,9 @@ export function activate(context: vscode.ExtensionContext) {
 			await replaceWithTranslation(editor);
 
 			await tytlerScan();
-
-			// TODO: This is not waiting for the replacement to happen so it breaks tytler, Try to fix it
-			vscode.commands.executeCommand('editor.action.formatDocument');
 			vscode.window.showInformationMessage('Tytler: Text replaced with translation key.');
+
+			vscode.commands.executeCommand('editor.action.formatDocument');
 		} else {
 			vscode.window.showErrorMessage('Tytler: No workspace folder is open.');
 		}
@@ -163,11 +162,12 @@ export function activate(context: vscode.ExtensionContext) {
 			await replaceWithTranslation(editor);
 
 			await tytlerScan();
-			await tytlerSync();
-
-			// TODO: This is not waiting for the replacement to happen so it breaks tytler, Try to fix it
-			// vscode.commands.executeCommand('editor.action.formatDocument');
 			vscode.window.showInformationMessage('Tytler: Text replaced with translation key.');
+
+			await tytlerSync();
+			vscode.window.showInformationMessage('Tytler: Translations synced with OpenAI.');
+
+			vscode.commands.executeCommand('editor.action.formatDocument');
 		} else {
 			vscode.window.showErrorMessage('Tytler: No workspace folder is open.');
 		}

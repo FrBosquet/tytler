@@ -25,24 +25,24 @@ async function main() {
     logger.whisper(`- install: Install the Tytler VS Code extension`);
     logger.whisper(`- scan: Scan the current directory to parse Tytler translation and fill the default lang file`);
     logger.whisper(`- sync: Sync the translations using OpenAI to translate missing keys`);
-
-    process.exit(0);
   } else if (command === 'init') {
-    init();
+    await init();
   } else if (command === 'config') {
-    config();
+    await config();
   } else if (command === 'settings') {
-    settings();
+    await settings();
   } else if (command === 'install') {
-    install();
+    await install();
   } else if (command === 'scan') {
-    scan();
+    await scan();
   } else if (command === 'sync') {
-    sync();
+    await sync();
   } else {
     logger.error(`# Command not found: ${command}`);
+    process.exit(1);
   }
-  process.exit(1);
+
+  process.exit(0);
 }
 
 main();

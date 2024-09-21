@@ -8,11 +8,15 @@ async function sync() {
   let openai: OpenAI;
   try {
     openai = new OpenAI({ apiKey: getCliConfig('openai') })
-
   } catch (e) {
     logger.error(`OpenAI API Key not found. Please set it using 'tytler settings set openai <api-key>'`)
     process.exit(1)
   }
+
+  await new Promise((resolve) => setTimeout(() => {
+    console.log('Test')
+    resolve(void 0)
+  }, 1000))
 
   logger.info(`\n# Scanning default lang for keys...`);
 
@@ -61,6 +65,7 @@ async function sync() {
     }
 
     const missingKeysCount = Object.keys(missingKeys).length
+
     if (missingKeysCount > 0) {
       logger.whisper(`${missingKeysCount} untranslated keys found`)
       logger.whisper('Translating using gpt-4o-mini...')

@@ -1,14 +1,5 @@
 #!/usr/bin/env node
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -22,44 +13,42 @@ const scan_1 = __importDefault(require("./scan"));
 const settings_1 = __importDefault(require("./settings"));
 const sync_1 = __importDefault(require("./sync"));
 const command = (0, lib_1.getArg)(0);
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!command) {
-            const pkjson = (0, lib_1.getPackageJson)();
-            alpalog_1.logger.info(`\n# Hello from Tytler!`);
-            alpalog_1.logger.warn(`version: ${pkjson.version}`);
-            alpalog_1.logger.whisper(`\n# Usage: tytler <command>`);
-            alpalog_1.logger.whisper(`\n# Commands:`);
-            alpalog_1.logger.whisper(`- init: Create a config file in the current directory`);
-            alpalog_1.logger.whisper(`- config: Show the config for the current repo`);
-            alpalog_1.logger.whisper(`- settings: Show the global tytler settings`);
-            alpalog_1.logger.whisper(`- install: Install the Tytler VS Code extension`);
-            alpalog_1.logger.whisper(`- scan: Scan the current directory to parse Tytler translation and fill the default lang file`);
-            alpalog_1.logger.whisper(`- sync: Sync the translations using OpenAI to translate missing keys`);
-            process.exit(0);
-        }
-        else if (command === 'init') {
-            (0, init_1.default)();
-        }
-        else if (command === 'config') {
-            (0, config_1.default)();
-        }
-        else if (command === 'settings') {
-            (0, settings_1.default)();
-        }
-        else if (command === 'install') {
-            (0, install_1.default)();
-        }
-        else if (command === 'scan') {
-            (0, scan_1.default)();
-        }
-        else if (command === 'sync') {
-            (0, sync_1.default)();
-        }
-        else {
-            alpalog_1.logger.error(`# Command not found: ${command}`);
-        }
+async function main() {
+    if (!command) {
+        const pkjson = (0, lib_1.getPackageJson)();
+        alpalog_1.logger.info(`\n# Hello from Tytler!`);
+        alpalog_1.logger.warn(`version: ${pkjson.version}`);
+        alpalog_1.logger.whisper(`\n# Usage: tytler <command>`);
+        alpalog_1.logger.whisper(`\n# Commands:`);
+        alpalog_1.logger.whisper(`- init: Create a config file in the current directory`);
+        alpalog_1.logger.whisper(`- config: Show the config for the current repo`);
+        alpalog_1.logger.whisper(`- settings: Show the global tytler settings`);
+        alpalog_1.logger.whisper(`- install: Install the Tytler VS Code extension`);
+        alpalog_1.logger.whisper(`- scan: Scan the current directory to parse Tytler translation and fill the default lang file`);
+        alpalog_1.logger.whisper(`- sync: Sync the translations using OpenAI to translate missing keys`);
+    }
+    else if (command === 'init') {
+        await (0, init_1.default)();
+    }
+    else if (command === 'config') {
+        await (0, config_1.default)();
+    }
+    else if (command === 'settings') {
+        await (0, settings_1.default)();
+    }
+    else if (command === 'install') {
+        await (0, install_1.default)();
+    }
+    else if (command === 'scan') {
+        await (0, scan_1.default)();
+    }
+    else if (command === 'sync') {
+        await (0, sync_1.default)();
+    }
+    else {
+        alpalog_1.logger.error(`# Command not found: ${command}`);
         process.exit(1);
-    });
+    }
+    process.exit(0);
 }
 main();
