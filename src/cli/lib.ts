@@ -1,8 +1,9 @@
 
 import { logger } from "alpalog";
-import { exec } from "child_process";
+import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import path from "path";
+import { exit } from "process";
 import readline from "readline";
 
 const rl = readline.createInterface({
@@ -69,15 +70,15 @@ export const convertToCamelCase = (input: string): string => {
   return firstPart + capitalizedSecondPart;
 }
 
-export const asyncExec = (command: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    exec(command, (error: any, stdout: string, stderr: string) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(stdout);
-    });
-  });
+export const asyncExec = (command: string): string => {
+  try {
+    const stdout = execSync(command)
+
+    return stdout.toString()
+  } catch (e) {
+    logger.error(`\n# Error executing command: ${command}`);
+    exit(1);
+  }
 }
 
 export const getCliConfigs = (): Record<string, string> => {

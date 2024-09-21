@@ -26,14 +26,14 @@ async function scan() {
 
   let added = 0
 
-  const scanFolder = async (folder: string) => {
+  const scanFolder = (folder: string) => {
     logger.whisper(`Scanning ${folder}...`)
 
     const componentsDir = path.join(currentDir, folder)
     const command = `egrep -r ${pattern} ${componentsDir}`
 
     // Look for the pattern t('*') in all files in the target dir
-    const stdout = await asyncExec(command)
+    const stdout = asyncExec(command)
 
     const lines = stdout.split('\n')
 
@@ -42,13 +42,13 @@ async function scan() {
 
       const match = text?.match(/t\('(.*?)\'\)/)
 
-      if (!match) return
+      if (!match) continue
 
       let key = match[1],
         content = ''
 
       if (key in defaultLang) {
-        return
+        continue
       }
 
       added++
@@ -59,12 +59,13 @@ async function scan() {
         if (newKey in defaultLang) {
           logger.error(`Key ${newKey} already exists and trying rewrite. Check ${newKey} in ${file}`)
           logger.whisper('Using previous value...')
-          await asyncExec(`sed -i 's/${key}/${newKey}/g' ${file}`)
-          return
+          asyncExec(`sed -i 's/${key}/${newKey}/g' ${file}`)
+          continue
         }
 
         // Detect if content has any characters beetween curly braces, like {user.name}
         const hasCurlyBraces = newContent.match(/{.*?}/)
+
         if (hasCurlyBraces) {
           const replacements = hasCurlyBraces.map(key => key.replace(/[{}]/g, ''))
 
@@ -80,9 +81,9 @@ async function scan() {
 
           valuesObj += '}'
 
-          await asyncExec(`sed -i "s/${key}')/${newKey}',${valuesObj})/g" ${file}`)
+          asyncExec(`sed -i "s/${key}')/${newKey}',${valuesObj})/g" ${file}`)
         } else {
-          await asyncExec(`sed -i 's/${key}/${newKey}/g' ${file}`)
+          asyncExec(`sed -i 's/${key}/${newKey}/g' ${file}`)
         }
 
         key = newKey
@@ -94,7 +95,7 @@ async function scan() {
   }
 
   for (const folder of config.targetDir) {
-    await scanFolder(folder)
+    scanFolder(folder)
   }
 
   writeJsonFile(defaultLangPathname, defaultLang)

@@ -8,6 +8,7 @@ const alpalog_1 = require("alpalog");
 const child_process_1 = require("child_process");
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
+const process_1 = require("process");
 const readline_1 = __importDefault(require("readline"));
 const rl = readline_1.default.createInterface({
     input: process.stdin,
@@ -64,14 +65,14 @@ const convertToCamelCase = (input) => {
 };
 exports.convertToCamelCase = convertToCamelCase;
 const asyncExec = (command) => {
-    return new Promise((resolve, reject) => {
-        (0, child_process_1.exec)(command, (error, stdout, stderr) => {
-            if (error) {
-                reject(error);
-            }
-            resolve(stdout);
-        });
-    });
+    try {
+        const stdout = (0, child_process_1.execSync)(command);
+        return stdout.toString();
+    }
+    catch (e) {
+        alpalog_1.logger.error(`\n# Error executing command: ${command}`);
+        (0, process_1.exit)(1);
+    }
 };
 exports.asyncExec = asyncExec;
 const getCliConfigs = () => {

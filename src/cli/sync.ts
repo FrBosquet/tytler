@@ -1,7 +1,6 @@
 import OpenAI from 'openai';
 import path from 'path';
 
-
 import { logger } from "alpalog";
 import { getCliConfig, getConfig, readJsonFile, sortObjectKeys, writeJsonFile } from "./lib";
 

@@ -28,21 +28,21 @@ function scan() {
         alpalog_1.logger.whisper('Default lang loaded!');
         const pattern = `"\\bt\\([\\'](.*?)[\\']\\)"`;
         let added = 0;
-        const scanFolder = (folder) => __awaiter(this, void 0, void 0, function* () {
+        const scanFolder = (folder) => {
             alpalog_1.logger.whisper(`Scanning ${folder}...`);
             const componentsDir = path_1.default.join(currentDir, folder);
             const command = `egrep -r ${pattern} ${componentsDir}`;
             // Look for the pattern t('*') in all files in the target dir
-            const stdout = yield (0, lib_1.asyncExec)(command);
+            const stdout = (0, lib_1.asyncExec)(command);
             const lines = stdout.split('\n');
             for (const line of lines) {
                 const [file, text] = line.split(':');
                 const match = text === null || text === void 0 ? void 0 : text.match(/t\('(.*?)\'\)/);
                 if (!match)
-                    return;
+                    continue;
                 let key = match[1], content = '';
                 if (key in defaultLang) {
-                    return;
+                    continue;
                 }
                 added++;
                 if (key.includes('->')) {
@@ -50,8 +50,8 @@ function scan() {
                     if (newKey in defaultLang) {
                         alpalog_1.logger.error(`Key ${newKey} already exists and trying rewrite. Check ${newKey} in ${file}`);
                         alpalog_1.logger.whisper('Using previous value...');
-                        yield (0, lib_1.asyncExec)(`sed -i 's/${key}/${newKey}/g' ${file}`);
-                        return;
+                        (0, lib_1.asyncExec)(`sed -i 's/${key}/${newKey}/g' ${file}`);
+                        continue;
                     }
                     // Detect if content has any characters beetween curly braces, like {user.name}
                     const hasCurlyBraces = newContent.match(/{.*?}/);
@@ -65,19 +65,19 @@ function scan() {
                             newContent = newContent.replace(`{${replacement}}`, `{{${key}}}`);
                         });
                         valuesObj += '}';
-                        yield (0, lib_1.asyncExec)(`sed -i "s/${key}')/${newKey}',${valuesObj})/g" ${file}`);
+                        (0, lib_1.asyncExec)(`sed -i "s/${key}')/${newKey}',${valuesObj})/g" ${file}`);
                     }
                     else {
-                        yield (0, lib_1.asyncExec)(`sed -i 's/${key}/${newKey}/g' ${file}`);
+                        (0, lib_1.asyncExec)(`sed -i 's/${key}/${newKey}/g' ${file}`);
                     }
                     key = newKey;
                     content = newContent;
                 }
                 defaultLang[key] = content;
             }
-        });
+        };
         for (const folder of config.targetDir) {
-            yield scanFolder(folder);
+            scanFolder(folder);
         }
         (0, lib_1.writeJsonFile)(defaultLangPathname, defaultLang);
         alpalog_1.logger.success(`\n✅ Added ${added} new keys to ${config.defaultLang}.json`);
