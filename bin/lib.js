@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertToCamelCase = exports.getPackageJson = exports.writeJsonFile = exports.readJsonFile = exports.sortObjectKeys = exports.getConfig = exports.askQuestion = void 0;
+exports.getArg = exports.setCliConfig = exports.getCliConfig = exports.getCliConfigs = exports.asyncExec = exports.convertToCamelCase = exports.getPackageJson = exports.writeJsonFile = exports.readJsonFile = exports.sortObjectKeys = exports.getConfig = exports.askQuestion = void 0;
 const alpalog_1 = require("alpalog");
+const child_process_1 = require("child_process");
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 const readline_1 = __importDefault(require("readline"));
@@ -62,3 +63,42 @@ const convertToCamelCase = (input) => {
     return firstPart + capitalizedSecondPart;
 };
 exports.convertToCamelCase = convertToCamelCase;
+const asyncExec = (command) => {
+    return new Promise((resolve, reject) => {
+        (0, child_process_1.exec)(command, (error, stdout, stderr) => {
+            if (error) {
+                reject(error);
+            }
+            resolve(stdout);
+        });
+    });
+};
+exports.asyncExec = asyncExec;
+const getCliConfigs = () => {
+    const currentDir = __dirname;
+    return (0, exports.readJsonFile)(path_1.default.join(currentDir, 'settings.json'));
+};
+exports.getCliConfigs = getCliConfigs;
+const getCliConfig = (key) => {
+    const config = (0, exports.getCliConfigs)();
+    return config[key];
+};
+exports.getCliConfig = getCliConfig;
+const setCliConfig = (key, value) => {
+    const currentDir = __dirname;
+    let config;
+    try {
+        config = (0, exports.getCliConfigs)();
+    }
+    catch (e) {
+        config = {};
+    }
+    config[key] = value;
+    (0, exports.writeJsonFile)(path_1.default.join(currentDir, 'settings.json'), config);
+};
+exports.setCliConfig = setCliConfig;
+const getArg = (index) => {
+    const args = process.argv.slice(2);
+    return args[index];
+};
+exports.getArg = getArg;

@@ -1,5 +1,6 @@
 
 import { logger } from "alpalog";
+import { exec } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 import readline from "readline";
@@ -66,4 +67,46 @@ export const convertToCamelCase = (input: string): string => {
   const [firstPart, secondPart] = parts;
   const capitalizedSecondPart = secondPart.charAt(0).toUpperCase() + secondPart.slice(1);
   return firstPart + capitalizedSecondPart;
+}
+
+export const asyncExec = (command: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    exec(command, (error: any, stdout: string, stderr: string) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(stdout);
+    });
+  });
+}
+
+export const getCliConfigs = (): Record<string, string> => {
+  const currentDir = __dirname;
+  return readJsonFile<Record<string, string>>(path.join(currentDir, 'settings.json'));
+}
+
+export const getCliConfig = (key: string): string => {
+  const config = getCliConfigs();
+
+  return config[key];
+}
+
+export const setCliConfig = (key: string, value: string): void => {
+  const currentDir = __dirname;
+  let config
+
+  try {
+    config = getCliConfigs();
+  } catch (e) {
+    config = {}
+  }
+
+  config[key] = value;
+
+  writeJsonFile(path.join(currentDir, 'settings.json'), config);
+}
+
+export const getArg = (index: number): string | undefined => {
+  const args = process.argv.slice(2);
+  return args[index];
 }

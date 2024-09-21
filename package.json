@@ -1,10 +1,10 @@
 {
   "name": "tytler",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Inspired by Alexander Fraser Tytler, who wrote one of the earliest essays on the principles of translation. Tytler provides an assited workflow to work with translations in both server side and client side react applications.",
   "main": "index.js",
   "scripts": {
-    "build:cli": "tsc"
+    "build:cli": "tsc && node createSettings.js"
   },
   "bin": {
     "tytler": "./bin/cli.js"
@@ -17,6 +17,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
-    "alpalog": "^0.0.2"
+    "alpalog": "^0.0.2",
+    "openai": "^4.63.0"
   }
 }

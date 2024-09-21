@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const alpalog_1 = require("alpalog");
 const lib_1 = require("./lib");
 function config() {
-    alpalog_1.logger.info(`\n# Tytler config:\n`);
+    alpalog_1.logger.info(`\n# Tytler repo config:\n`);
     const config = (0, lib_1.getConfig)();
     alpalog_1.logger.info('');
     alpalog_1.logger.json(config);

@@ -2,7 +2,7 @@
   "name": "tytler",
   "displayName": "tytler",
   "description": "Helper function to work with tytler",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.93.0"
   },
@@ -20,6 +20,11 @@
       {
         "command": "tytler.replace-with-translation",
         "title": "Replace with translation",
+        "category": "Tytler"
+      },
+      {
+        "command": "tytler.replace-and-sync",
+        "title": "Replace with translation and sync languages",
         "category": "Tytler"
       }
     ]

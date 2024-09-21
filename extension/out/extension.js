@@ -106,7 +106,37 @@ function activate(context) {
         });
         await vscode.commands.executeCommand('workbench.action.files.saveWithoutFormatting');
     };
-    const disposable = vscode.commands.registerCommand('tytler.replace-with-translation', async () => {
+    const tytlerScan = async () => {
+        await new Promise((resolve, reject) => {
+            (0, child_process_1.exec)(`tytler scan`, { cwd: getWorkspaceFolder() }, (error, stdout, stderr) => {
+                if (error) {
+                    vscode.window.showErrorMessage(`Tytler CLI error: ${error.message}`);
+                    reject(error);
+                }
+                if (stderr) {
+                    vscode.window.showErrorMessage(`Tytler CLI error: ${stderr}`);
+                    resolve(stderr);
+                }
+                resolve(stdout);
+            });
+        });
+    };
+    const tytlerSync = async () => {
+        await new Promise((resolve, reject) => {
+            (0, child_process_1.exec)(`tytler sync`, { cwd: getWorkspaceFolder() }, (error, stdout, stderr) => {
+                if (error) {
+                    vscode.window.showErrorMessage(`Tytler CLI error: ${error.message}`);
+                    reject(error);
+                }
+                if (stderr) {
+                    vscode.window.showErrorMessage(`Tytler CLI error: ${stderr}`);
+                    resolve(stderr);
+                }
+                resolve(stdout);
+            });
+        });
+    };
+    const disposableReplace = vscode.commands.registerCommand('tytler.replace-with-translation', async () => {
         if (workspaceFolders) {
             await checkAvailability();
             const config = getConfig();
@@ -116,27 +146,37 @@ function activate(context) {
                 return;
             }
             await replaceWithTranslation(editor);
-            await new Promise((resolve, reject) => {
-                (0, child_process_1.exec)(`tytler scan`, { cwd: getWorkspaceFolder() }, (error, stdout, stderr) => {
-                    if (error) {
-                        vscode.window.showErrorMessage(`Tytler CLI error: ${error.message}`);
-                        reject(error);
-                    }
-                    if (stderr) {
-                        vscode.window.showErrorMessage(`Tytler CLI error: ${stderr}`);
-                        resolve(stderr);
-                    }
-                    resolve(stdout);
-                });
-            });
+            await tytlerScan();
+            // TODO: This is not waiting for the replacement to happen so it breaks tytler, Try to fix it
             // vscode.commands.executeCommand('editor.action.formatDocument');
-            vscode.window.showInformationMessage('Tytler: Text replaced with translation key. Run the script to update the JSON file.');
+            vscode.window.showInformationMessage('Tytler: Text replaced with translation key.');
         }
         else {
             vscode.window.showErrorMessage('Tytler: No workspace folder is open.');
         }
     });
-    context.subscriptions.push(disposable);
+    const disposableReplaceAndSync = vscode.commands.registerCommand('tytler.replace-and-sync', async () => {
+        if (workspaceFolders) {
+            await checkAvailability();
+            const config = getConfig();
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showErrorMessage('Tytler: No active editor found.');
+                return;
+            }
+            await replaceWithTranslation(editor);
+            await tytlerScan();
+            await tytlerSync();
+            // TODO: This is not waiting for the replacement to happen so it breaks tytler, Try to fix it
+            // vscode.commands.executeCommand('editor.action.formatDocument');
+            vscode.window.showInformationMessage('Tytler: Text replaced with translation key.');
+        }
+        else {
+            vscode.window.showErrorMessage('Tytler: No workspace folder is open.');
+        }
+    });
+    context.subscriptions.push(disposableReplace);
+    context.subscriptions.push(disposableReplaceAndSync);
 }
 function deactivate() { }
 //# sourceMappingURL=extension.js.map
