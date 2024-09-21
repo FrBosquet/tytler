@@ -1,4 +1,4 @@
-# Tytler
+# Tytler (Work In Progress)
 
 > Inspired by Alexander Fraser Tytler, who wrote one of the earliest essays on the principles of translation.
 
