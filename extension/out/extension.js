@@ -148,7 +148,7 @@ function activate(context) {
             await replaceWithTranslation(editor);
             await tytlerScan();
             // TODO: This is not waiting for the replacement to happen so it breaks tytler, Try to fix it
-            // vscode.commands.executeCommand('editor.action.formatDocument');
+            vscode.commands.executeCommand('editor.action.formatDocument');
             vscode.window.showInformationMessage('Tytler: Text replaced with translation key.');
         }
         else {

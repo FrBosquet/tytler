@@ -8,12 +8,19 @@
 
 ### Extension
 
-To create a new version of the extension, run the following command:
+To create a new version of the extension, run the following command in the extension folder:
 
 ```bash
-npm run package
+npm version patch
+vsce package
 ```
 
 This will create a new version of the extension in the root folder.
 
-Next, update the `install script` in the cli to use the new file
+Next, remove the previous version vsix file from the root folder so the install script can use the new version.
+
+To install the version, build the CLI command and run the following command in:
+
+```bash
+tytler install
+```
