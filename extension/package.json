@@ -2,7 +2,7 @@
   "name": "tytler",
   "displayName": "tytler",
   "description": "Helper function to work with tytler",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "vscode": "^1.93.0"
   },
