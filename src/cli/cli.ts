@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { logger } from "alpalog";
+import add from "./add";
 import config from "./config";
 import init from "./init";
 import install from "./install";
@@ -25,6 +26,7 @@ async function main() {
     logger.whisper(`- install: Install the Tytler VS Code extension`);
     logger.whisper(`- scan: Scan the current directory to parse Tytler translation and fill the default lang file`);
     logger.whisper(`- sync: Sync the translations using OpenAI to translate missing keys`);
+    logger.whisper(`- add <key> <value>: Add a key to the default lang file`);
   } else if (command === 'init') {
     await init();
   } else if (command === 'config') {
@@ -37,6 +39,8 @@ async function main() {
     await scan();
   } else if (command === 'sync') {
     await sync();
+  } else if (command === 'add') {
+    await add()
   } else {
     logger.error(`# Command not found: ${command}`);
     process.exit(1);

@@ -6,6 +6,10 @@
 
 ## Development
 
+### CLI
+
+To create a new command, just do it and `npm publish` the package.
+
 ### Extension
 
 To create a new version of the extension, run the following command in the extension folder:

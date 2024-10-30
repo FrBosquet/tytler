@@ -54,6 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const contextText = line.text;
 		const selectedText = editor.document.getText(editor.selection);
 
+		// For debugging purposes
 		console.log({
 			contextText,
 			selectedText

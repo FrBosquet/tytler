@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const alpalog_1 = require("alpalog");
+const add_1 = __importDefault(require("./add"));
 const config_1 = __importDefault(require("./config"));
 const init_1 = __importDefault(require("./init"));
 const install_1 = __importDefault(require("./install"));
@@ -26,6 +27,7 @@ async function main() {
         alpalog_1.logger.whisper(`- install: Install the Tytler VS Code extension`);
         alpalog_1.logger.whisper(`- scan: Scan the current directory to parse Tytler translation and fill the default lang file`);
         alpalog_1.logger.whisper(`- sync: Sync the translations using OpenAI to translate missing keys`);
+        alpalog_1.logger.whisper(`- add <key> <value>: Add a key to the default lang file`);
     }
     else if (command === 'init') {
         await (0, init_1.default)();
@@ -44,6 +46,9 @@ async function main() {
     }
     else if (command === 'sync') {
         await (0, sync_1.default)();
+    }
+    else if (command === 'add') {
+        await (0, add_1.default)();
     }
     else {
         alpalog_1.logger.error(`# Command not found: ${command}`);
