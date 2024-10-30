@@ -193,7 +193,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const disposableAddTranslation = vscode.commands.registerCommand('tytler.add-translation', async () => {
 		if (workspaceFolders) {
 			await checkAvailability();
-			const config = getConfig();
 			const editor = vscode.window.activeTextEditor;
 
 			if (!editor) {

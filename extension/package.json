@@ -26,6 +26,16 @@
         "command": "tytler.replace-and-sync",
         "title": "Replace with translation and sync languages",
         "category": "Tytler"
+      },
+      {
+        "command": "tytler.tytler.add-translation",
+        "title": "Add a translation",
+        "category": "Tytler"
+      },
+      {
+        "command": "tytler.sync",
+        "title": "Replace Sync translations with all languages",
+        "category": "Tytler"
       }
     ]
   },
