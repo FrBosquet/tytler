@@ -191,7 +191,6 @@ function activate(context) {
     const disposableAddTranslation = vscode.commands.registerCommand('tytler.add-translation', async () => {
         if (workspaceFolders) {
             await checkAvailability();
-            const config = getConfig();
             const editor = vscode.window.activeTextEditor;
             if (!editor) {
                 vscode.window.showErrorMessage('Tytler: No active editor found.');
