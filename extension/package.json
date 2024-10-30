@@ -28,7 +28,7 @@
         "category": "Tytler"
       },
       {
-        "command": "tytler.tytler.add-translation",
+        "command": "tytler.add-translation",
         "title": "Add a translation",
         "category": "Tytler"
       },
