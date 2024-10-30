@@ -178,27 +178,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const disposableSync = vscode.commands.registerCommand('tytler.sync', async () => {
 		await checkAvailability();
-		const config = getConfig();
-		const editor = vscode.window.activeTextEditor;
-
-		if (!editor) {
-			vscode.window.showErrorMessage('Tytler: No active editor found.');
-			return;
-		}
-
 		await tytlerSync();
-		vscode.window.showInformationMessage('Tytler: Translations synced with OpenAI.');
+		vscode.window.showInformationMessage('Tytler: Translations synced using OpenAI.');
 	});
 
 	const disposableAddTranslation = vscode.commands.registerCommand('tytler.add-translation', async () => {
 		if (workspaceFolders) {
 			await checkAvailability();
-			const editor = vscode.window.activeTextEditor;
-
-			if (!editor) {
-				vscode.window.showErrorMessage('Tytler: No active editor found.');
-				return;
-			}
 
 			const translationKey = await vscode.window.showInputBox({
 				placeHolder: 'Enter the translation key',
