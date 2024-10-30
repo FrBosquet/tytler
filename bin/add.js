@@ -24,6 +24,7 @@ async function add() {
     const defaultLang = (0, lib_1.readJsonFile)(defaultLangPathname);
     alpalog_1.logger.whisper('Default lang loaded!');
     alpalog_1.logger.info(`\n# Adding key to default lang...`);
+    defaultLang[key] = value;
     (0, lib_1.writeJsonFile)(defaultLangPathname, (0, lib_1.sortObjectKeys)(defaultLang));
     alpalog_1.logger.success(`Successfully added key to default lang!`);
     alpalog_1.logger.info(`\n# You can run 'tytler sync' to sync the key to other languages.`);

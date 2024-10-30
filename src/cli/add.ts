@@ -32,6 +32,7 @@ async function add() {
   logger.whisper('Default lang loaded!')
 
   logger.info(`\n# Adding key to default lang...`)
+  defaultLang[key] = value
   writeJsonFile(defaultLangPathname, sortObjectKeys(defaultLang))
 
   logger.success(`Successfully added key to default lang!`)
