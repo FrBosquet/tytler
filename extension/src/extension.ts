@@ -176,10 +176,67 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	const disposableSync = vscode.commands.registerCommand('tytler.sync', async () => {
+		await checkAvailability();
+		const config = getConfig();
+		const editor = vscode.window.activeTextEditor;
 
+		if (!editor) {
+			vscode.window.showErrorMessage('Tytler: No active editor found.');
+			return;
+		}
+
+		await tytlerSync();
+		vscode.window.showInformationMessage('Tytler: Translations synced with OpenAI.');
+	});
+
+	const disposableAddTranslation = vscode.commands.registerCommand('tytler.add-translation', async () => {
+		if (workspaceFolders) {
+			await checkAvailability();
+			const config = getConfig();
+			const editor = vscode.window.activeTextEditor;
+
+			if (!editor) {
+				vscode.window.showErrorMessage('Tytler: No active editor found.');
+				return;
+			}
+
+			const translationKey = await vscode.window.showInputBox({
+				placeHolder: 'Enter the translation key',
+				value: previousKey ?? '',
+				ignoreFocusOut: true,
+				valueSelection: [previousKey.length, previousKey.length]
+			});
+
+			const translationValue = await vscode.window.showInputBox({
+				placeHolder: 'Enter the translation value',
+				ignoreFocusOut: true
+			});
+
+			await new Promise((resolve, reject) => {
+				exec(`tytler add "${translationKey}" "${translationValue}"`, { cwd: getWorkspaceFolder() }, (error, stdout, stderr) => {
+					if (error) {
+						vscode.window.showErrorMessage(`Tytler CLI error: ${error.message}`);
+						reject(error);
+					}
+					if (stderr) {
+						vscode.window.showErrorMessage(`Tytler CLI error: ${stderr}`);
+						resolve(stderr);
+					}
+					resolve(stdout);
+				});
+			});
+
+			vscode.window.showInformationMessage('Tytler: Translation added.');
+		} else {
+			vscode.window.showErrorMessage('Tytler: No workspace folder is open.');
+		}
+	});
 
 	context.subscriptions.push(disposableReplace);
 	context.subscriptions.push(disposableReplaceAndSync);
+	context.subscriptions.push(disposableSync);
+	context.subscriptions.push(disposableAddTranslation);
 }
 
 export function deactivate() { }
