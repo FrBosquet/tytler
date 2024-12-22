@@ -19,6 +19,12 @@ npm version patch
 vsce package
 ```
 
+If you don't have `vsce` installed, you can install it globally with:
+
+```bash
+npm install -g vsce
+```
+
 This will create a new version of the extension in the root folder.
 
 Next, remove the previous version vsix file from the root folder so the install script can use the new version.
