@@ -1,5 +1,8 @@
 import { logger } from "alpalog";
 import { getArg, getCliConfig, getCliConfigs, setCliConfig } from "./lib";
+const path = require('path');
+
+const filePath = path.join(__dirname, 'bin', 'settings.json');
 
 function settings() {
   const op = getArg(1);
@@ -36,11 +39,16 @@ function settings() {
       logger.info(`\n# ${key} set to ${value}`);
       process.exit(0);
     }
+
+  } else if (op === 'init') {
+
+
   } else if (op == undefined) {
     const config = getCliConfigs();
     logger.info('');
     logger.json(config);
     process.exit(0);
+
   } else {
     logger.error(`\n# Operation not found: ${op}`);
     process.exit(1);
