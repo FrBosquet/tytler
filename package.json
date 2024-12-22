@@ -14,11 +14,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^22.5.5",
-    "typescript": "^5.6.2"
+    "@types/node": "^22.5.5"
   },
   "dependencies": {
     "alpalog": "^0.0.2",
-    "openai": "^4.63.0"
+    "openai": "^4.63.0",
+    "typescript": "^5.6.2"
   }
 }
