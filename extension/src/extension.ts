@@ -212,6 +212,7 @@ export function activate(context: vscode.ExtensionContext) {
 				});
 			});
 
+			await tytlerSync();
 			vscode.window.showInformationMessage('Tytler: Translation added.');
 		} else {
 			vscode.window.showErrorMessage('Tytler: No workspace folder is open.');

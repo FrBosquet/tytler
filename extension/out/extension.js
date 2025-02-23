@@ -208,6 +208,7 @@ function activate(context) {
                     resolve(stdout);
                 });
             });
+            await tytlerSync();
             vscode.window.showInformationMessage('Tytler: Translation added.');
         }
         else {
