@@ -34,3 +34,6 @@ To install the version, build the CLI command and run the following command in:
 ```bash
 tytler install
 ```
+
+### Releasing
+
